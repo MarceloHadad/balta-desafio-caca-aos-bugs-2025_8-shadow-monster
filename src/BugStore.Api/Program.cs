@@ -54,6 +54,12 @@ builder.Services.AddScoped<IHandler<RevenueByPeriodRequest, GetRevenueByPeriodRe
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+}
+
 app.Use(async (context, next) =>
 {
     try
